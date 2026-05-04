@@ -18,11 +18,18 @@ def create_course(db: Session, title: str):
     return course
 
 
-def assign_course(db: Session, student_id: int, course_id: int):
+def assign_courses(db: Session, student_id: int, course_ids: list[int]):
     student = db.query(models.Student).filter(models.Student.id == student_id).first()
-    course = db.query(models.Course).filter(models.Course.id == course_id).first()
 
-    student.courses.append(course)
+    if not student:
+        return None
+
+    courses = db.query(models.Course).filter(models.Course.id.in_(course_ids)).all()
+
+    existing_ids = {c.id for c in student.courses}
+    new_courses = [c for c in courses if c.id not in existing_ids]
+
+    student.courses.extend(new_courses)
 
     db.commit()
     db.refresh(student)

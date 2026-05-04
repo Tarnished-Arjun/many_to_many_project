@@ -30,3 +30,7 @@ class StudentResponse(StudentBase):
 
 class CourseResponse(CourseBase):
     students: List[StudentBase] = []
+
+class AssignCourses(BaseModel):
+    student_id: int
+    course_ids: list[int]

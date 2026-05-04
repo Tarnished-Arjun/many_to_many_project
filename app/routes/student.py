@@ -30,8 +30,8 @@ def get_student(student_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/assign/")
-def assign_course(student_id: int, course_id: int, db: Session = Depends(get_db)):
-    return crud.assign_course(db, student_id, course_id)
+def assign_courses(data: schemas.AssignCourses, db: Session = Depends(get_db)):
+    return crud.assign_courses(db, data.student_id, data.course_ids)
 
 
 @router.delete("/{student_id}")
